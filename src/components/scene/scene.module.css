@@ -1,0 +1,259 @@
+.scene {
+  position: fixed;
+  inset: 0;
+  height: 100lvh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: var(--sky-mid);
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* colours come from theme tokens so day/night is a pure CSS swap */
+.skyTop,
+.skyMid,
+.skyBottom,
+.glowIn,
+.glowOut,
+.fogStop {
+  transition: stop-color 0.9s ease;
+}
+.skyTop {
+  stop-color: var(--sky-top);
+}
+.skyMid {
+  stop-color: var(--sky-mid);
+}
+.skyBottom {
+  stop-color: var(--sky-bottom);
+}
+.glowIn {
+  stop-color: var(--sun-glow);
+}
+.glowOut {
+  stop-color: var(--sun-glow);
+  stop-opacity: 0;
+}
+.fogStop {
+  stop-color: var(--fog);
+}
+
+.mtnFar,
+.mtnMid,
+.forestFar,
+.forestMid,
+.forestNear,
+.snow,
+.sun {
+  transition: fill 0.9s ease;
+}
+.mtnFar {
+  fill: var(--mtn-far);
+}
+.mtnMid {
+  fill: var(--mtn-mid);
+}
+.snow {
+  fill: var(--mtn-snow);
+  opacity: 0.85;
+}
+.forestFar {
+  fill: var(--forest-far);
+}
+.forestMid {
+  fill: var(--forest-mid);
+}
+.forestNear {
+  fill: var(--forest-near);
+}
+
+/* ---- parallax ---- */
+.layer {
+  transform: translate3d(
+    calc(var(--mx, 0) * var(--depth) * -28px),
+    calc(var(--sy, 0) * var(--depth) * 0.09px + var(--my, 0) * var(--depth) * -10px),
+    0
+  );
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* ---- sun & moon ---- */
+.sun {
+  fill: var(--sun-core);
+  filter: drop-shadow(0 0 22px var(--sun));
+}
+.glow {
+  animation: breathe 9s ease-in-out infinite;
+  transform-origin: 1210px 190px;
+}
+.craters {
+  fill: var(--sun);
+  opacity: calc(var(--stars) * 0.55);
+  transition: opacity 0.9s ease;
+}
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+/* ---- stars ---- */
+.stars {
+  opacity: var(--stars);
+  transition: opacity 1.2s ease;
+}
+.star {
+  fill: #f4f7ea;
+  animation: twinkle 6s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+.shootingStar {
+  stroke: #f4f7ea;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 60 400;
+  stroke-dashoffset: 60;
+  animation: shoot 14s ease-in 4s infinite;
+  transform: translate(1100px, 60px);
+}
+@keyframes shoot {
+  0% {
+    stroke-dashoffset: 60;
+    opacity: 1;
+  }
+  6% {
+    stroke-dashoffset: -150;
+    opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: -150;
+    opacity: 0;
+  }
+}
+
+/* ---- clouds ---- */
+.clouds {
+  fill: var(--cloud);
+  transition: fill 0.9s ease;
+}
+.cloudDrift {
+  animation: drift linear infinite;
+}
+@keyframes drift {
+  from {
+    transform: translateX(-400px);
+  }
+  to {
+    transform: translateX(1900px);
+  }
+}
+
+/* ---- birds ---- */
+.birds {
+  opacity: var(--birds);
+  transition: opacity 0.9s ease;
+  fill: none;
+  stroke: var(--forest-mid);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.bird {
+  animation: fly 38s linear infinite;
+}
+.wing {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: flap 0.9s ease-in-out infinite;
+}
+@keyframes fly {
+  from {
+    translate: -120px 260px;
+  }
+  to {
+    translate: 1750px 120px;
+  }
+}
+@keyframes flap {
+  0%,
+  100% {
+    scale: 1 1;
+  }
+  50% {
+    scale: 1 -0.6;
+  }
+}
+
+/* ---- fog ---- */
+.fogBand {
+  animation: fogDrift 60s ease-in-out infinite alternate;
+}
+@keyframes fogDrift {
+  from {
+    transform: translateX(-120px);
+  }
+  to {
+    transform: translateX(120px);
+  }
+}
+
+/* ---- fireflies ---- */
+.fireflies {
+  opacity: var(--fireflies);
+  transition: opacity 1.2s ease;
+}
+.firefly {
+  fill: var(--accent);
+  filter: drop-shadow(0 0 6px var(--accent));
+  animation:
+    hover 12s ease-in-out infinite alternate,
+    flicker 3s ease-in-out infinite;
+}
+@keyframes hover {
+  0% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(26px, -30px);
+  }
+  66% {
+    transform: translate(-18px, -12px);
+  }
+  100% {
+    transform: translate(12px, -44px);
+  }
+}
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layer {
+    transform: none;
+  }
+}
